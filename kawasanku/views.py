@@ -17,11 +17,11 @@ class TestJSON(APIView) :
     def get(self, request, format=None):
         # test_list = Test.objects.all()
         # serializer = Tserializers(test_list, many = True)
-        # test = json.loads(DISTRICT_JSON)
+        test = JITTER_JSON_DUN
         # f = open("reqbin-verify.txt", "r")
         # data = f.read()
         # return HttpResponse(data)
-        return JsonResponse(json.loads(JITTER_JSON_DUN), safe=False)        
+        return JsonResponse(test, safe=False)        
 
 class Snapshot(APIView) :
     def get(self, request, format=None):
