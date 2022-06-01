@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+from urllib.parse import urlparse
+from django.core.management.utils import get_random_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--z-c9@q1ex2*p9^_&m)tf^9bdx-x+tz8(eek#lf^45kko6qz5='
+# SECRET_KEY = 'django-insecure--z-c9@q1ex2*p9^_&m)tf^9bdx-x+tz8(eek#lf^45kko6qz5='
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['test-kawasanku.herokuapp.com', '127.0.0.1']
+# ALLOWED_HOSTS = ['test-kawasanku.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
+
 
 # Application definition
 
@@ -95,20 +102,47 @@ WSGI_APPLICATION = 'kawasanku.wsgi.application'
 # }
 
 # IF ON DESKTOP, USER IS 'kawasanku', if on laptop, USER is 'postgres' 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kawasanku_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Password1234@',
-        'HOST': 'localhost',
-        'PORT': 5432
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'kawasanku_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Password1234@',
+#         'HOST': 'localhost',
+#         'PORT': 5432
+#     }
+# }
 
 # import dj_database_url
 # db_from_env = dj_database_url.config(conn_max_age=600)
 # DATABASES['default'].update(db_from_env)
+
+if os.getenv("DATABASE_URL", "") != "" :
+    r = urlparse(os.environ.get("DATABASE_URL"))
+    DATABASES = {
+        "default" : {
+            "ENGINE" : "django.db.backends.postgresql_psycopg2",
+            "NAME" : os.path.realpath(r.path, "/"),
+            "USER" : r.username,
+            "PASSWORD" : r.password,
+            "HOST" : r.hostname,
+            "PORT" : r.port,
+            "OPTIONS" : {"sslmode" : "require"}
+        }
+    }
+else :
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'kawasanku_db',
+            'USER': 'postgres',
+            'PASSWORD': 'Password1234@',
+            'HOST': 'localhost',
+            'PORT': 5432
+        }
+    }
+
+
 
 # CACHES = {
 #     'default': {
