@@ -11,15 +11,17 @@ from rest_framework.views import APIView
 from django.core.cache import cache
 
 import json
+from .jitter import JITTER_JSON_DUN
 
 class TestJSON(APIView) :
     def get(self, request, format=None):
         # test_list = Test.objects.all()
         # serializer = Tserializers(test_list, many = True)
         # test = json.loads(DISTRICT_JSON)
-        f = open("reqbin-verify.txt", "r")
-        data = f.read()
-        return HttpResponse(data)
+        # f = open("reqbin-verify.txt", "r")
+        # data = f.read()
+        # return HttpResponse(data)
+        return JsonResponse(json.loads(JITTER_JSON_DUN), safe=False)        
 
 class Snapshot(APIView) :
     def get(self, request, format=None):
