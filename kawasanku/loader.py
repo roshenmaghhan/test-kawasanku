@@ -231,13 +231,21 @@ def generate_geojson(filepath, filename, STATE_ABBR, area_key) :
         area = data['features'][x]['properties'][area_key]
         cords = data['features'][x]['geometry']['coordinates']
         geo_info = {}
-        area = area.replace(" ", "-").lower() if area_key != 'state' or area_key != 'country' else STATE_ABBR[area]
 
+        if area_key == 'state' or area_key == 'country' :
+            area = STATE_ABBR[area]
+        else :
+            area = area.replace(" ", "-").lower()    
+        
         geo_info['name'] = area
         geo_info['area_type'] = area_key
         geo_info['shape_type'] = data['features'][x]['geometry']['type']
         geo_info['coordinates'] = cords
-        geo_main[area] = geo_info
+
+        if area_key == 'country' :
+            geo_main = geo_info
+        else :
+            geo_main[area] = geo_info
 
     with open(filename, 'w') as json_file:
         json.dump(geo_main, json_file)
@@ -309,18 +317,18 @@ def generate_valid_list(gsdm, gsp, filename) :
 
     print_page(filename, overview)
 
-# SNAPSHOT_INFO = Path("./src_data/snapshot_new.csv")
-# JITTER_INFO = Path("./src_data/jitter_new.csv")
-# STATE_DISTRICT = Path("./src_data/state_district.csv")
-# STATE_PARLIAMENT_DUN = Path("./src_data/state_parlimen_dun.csv")
+SNAPSHOT_INFO = Path("./staticfiles/src_data/snapshot.csv")
+JITTER_INFO = Path("./staticfiles/src_data/jitter.csv")
+STATE_DISTRICT = Path("./staticfiles/src_data/state_district.csv")
+STATE_PARLIAMENT_DUN = Path("./staticfiles/src_data/state_parlimen_dun.csv")
 # DUMMY = Path("./src_data/dummy.csv")
 
 # GEO JSON
-MALAYSIA_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_0_malaysia.json")
-STATE_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_1_state.json")
-DISTRICT_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_2_district.json")
-PARLIMEN_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_3_parlimen.json")
-DUN_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_4_dun.json")
+MALAYSIA_GEOJSON = Path("./staticfiles/src_data/geojson/geo_0_malaysia.json")
+STATE_GEOJSON = Path("./staticfiles/src_data/geojson/geo_1_state.json")
+DISTRICT_GEOJSON = Path("./staticfiles/src_data/geojson/geo_2_district.json")
+PARLIMEN_GEOJSON = Path("./staticfiles/src_data/geojson/geo_3_parlimen.json")
+DUN_GEOJSON = Path("./staticfiles/src_data/geojson/geo_4_dun.json")
 
 STATE_ABBR = {'Johor': 'jhr',
               'Kedah': 'kdh',
@@ -341,10 +349,10 @@ STATE_ABBR = {'Johor': 'jhr',
               'W.P. Kuala Lumpur': 'kul',
               'Malaysia': 'mys'}
 
-# snapshot = pd.read_csv(SNAPSHOT_INFO)
-# j = pd.read_csv(JITTER_INFO)
-# gsdm = pd.read_csv(STATE_DISTRICT)
-# gsp = pd.read_csv(STATE_PARLIAMENT_DUN)
+snapshot = pd.read_csv(SNAPSHOT_INFO)
+j = pd.read_csv(JITTER_INFO)
+gsdm = pd.read_csv(STATE_DISTRICT)
+gsp = pd.read_csv(STATE_PARLIAMENT_DUN)
 # dummy = pd.read_csv(DUMMY)
 
-generate_geojson(MALAYSIA_GEOJSON, "my.json", STATE_ABBR, 'country')
+GENERATED_PATH = './staticfiles/generated/'

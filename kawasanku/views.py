@@ -11,8 +11,7 @@ from rest_framework.views import APIView
 from django.core.cache import cache
 
 import json
-from .jitter import JITTER_JSON_DUN
-from .geo import MYS_GEOJSON
+from .geo import COUNTRY_GEOJSON, STATE_GEOJSON, DISTRICT_GEOJSON, PARLIMEN_GEOJSON, DUN_GEOJSON
 from .snapshot import DOUGHNUT_JSON, PYRAMID_JSON
 from .areas import STATIC_LINKS_JSON, DROPDOWN_JSON, AREAS_JSON
 from .jitter import JITTER_JSON_STATE, JITTER_JSON_DISTRICT, JITTER_JSON_PARLIMEN, JITTER_JSON_DUN
@@ -145,7 +144,8 @@ class GeoJSON(APIView) :
         area = request.query_params.get('area', None)
         a_area = ''
         q_id = 0
-        q_list = {"state" : 2, "district" : 3, "parlimen" : 4, "dun" : 5}
+        # q_list = {"state" : 2, "district" : 3, "parlimen" : 4, "dun" : 5}
+        q_list = {"country" : COUNTRY_GEOJSON, "state" : STATE_GEOJSON, "district" : DISTRICT_GEOJSON, "parlimen" : PARLIMEN_GEOJSON, "dun" : DUN_GEOJSON}
         
         if area == 'mys' :
             q_id = 1    
@@ -156,8 +156,8 @@ class GeoJSON(APIView) :
 
         if a_area != '' :
             data = ''
-            geo_cache = cache.get('geo_' + a_area)
-
+            # geo_cache = cache.get('geo_' + a_area)
+            geo_cache = json.loads(q_list[a_area])
             if not geo_cache :
                 json_list = Geo.objects.filter(id=q_id)
                 serializer = GeoSerializer(json_list, many = True)
