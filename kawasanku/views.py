@@ -14,6 +14,7 @@ import json
 from .jitter import JITTER_JSON_DUN
 from .geo import MYS_GEOJSON
 from .snapshot import DOUGHNUT_JSON, PYRAMID_JSON
+from .areas import STATIC_LINKS_JSON, DROPDOWN_JSON, AREAS_JSON
 
 class TestJSON(APIView) :
     def get(self, request, format=None):
@@ -117,7 +118,8 @@ class StaticJSON(APIView) :
     def get(self, request, format=None):    
         data = ''
 
-        static_cache = cache.get('static_cache')
+        # static_cache = cache.get('static_cache')
+        static_cache = json.loads(STATIC_LINKS_JSON)
         if not static_cache :
             json_list = Links.objects.all()
             serializer = LinksSerializer(json_list, many = True)            
@@ -179,7 +181,8 @@ class DropdownJSON(APIView) :
         filter = request.query_params.get('filter', None)
         data = ''
 
-        dropdown_cache = cache.get('dropdown_cache')
+        # dropdown_cache = cache.get('dropdown_cache')
+        dropdown_cache = json.loads(DROPDOWN_JSON)
         if not dropdown_cache : 
             json_list = Dropdown.objects.all()
             serializer = DropdownSerializer(json_list, many = True)
@@ -236,7 +239,8 @@ class AreaJSON(APIView) :
         area = request.query_params.get('area', None)
         
         data = ''
-        area_cache = cache.get('area_cache')
+        # area_cache = cache.get('area_cache')
+        area_cache = json.loads(AREAS_JSON)
         if not area_cache : 
             json_list = AreaType.objects.all()
             serializer = AreaSerializer(json_list, many = True)
