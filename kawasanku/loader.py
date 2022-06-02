@@ -309,18 +309,18 @@ def generate_valid_list(gsdm, gsp, filename) :
 
     print_page(filename, overview)
 
-SNAPSHOT_INFO = Path("./src_data/snapshot_new.csv")
-JITTER_INFO = Path("./src_data/jitter_new.csv")
-STATE_DISTRICT = Path("./src_data/state_district.csv")
-STATE_PARLIAMENT_DUN = Path("./src_data/state_parlimen_dun.csv")
-DUMMY = Path("./src_data/dummy.csv")
+# SNAPSHOT_INFO = Path("./src_data/snapshot_new.csv")
+# JITTER_INFO = Path("./src_data/jitter_new.csv")
+# STATE_DISTRICT = Path("./src_data/state_district.csv")
+# STATE_PARLIAMENT_DUN = Path("./src_data/state_parlimen_dun.csv")
+# DUMMY = Path("./src_data/dummy.csv")
 
 # GEO JSON
-MALAYSIA_GEOJSON = Path("./src_data/GEO_JSON_NEW/geo_0_malaysia.json")
-STATE_GEOJSON = Path("./src_data/GEO_JSON_NEW/geo_1_state.json")
-DISTRICT_GEOJSON = Path("./src_data/GEO_JSON_NEW/geo_2_district.json")
-PARLIMEN_GEOJSON = Path("./src_data/GEO_JSON_NEW/geo_3_parlimen.json")
-DUN_GEOJSON = Path("./src_data/GEO_JSON_NEW/geo_4_dun.json")
+MALAYSIA_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_0_malaysia.json")
+STATE_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_1_state.json")
+DISTRICT_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_2_district.json")
+PARLIMEN_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_3_parlimen.json")
+DUN_GEOJSON = Path("./staticfiles/src_data/GEO_JSON_NEW/geo_4_dun.json")
 
 STATE_ABBR = {'Johor': 'jhr',
               'Kedah': 'kdh',
@@ -341,11 +341,10 @@ STATE_ABBR = {'Johor': 'jhr',
               'W.P. Kuala Lumpur': 'kul',
               'Malaysia': 'mys'}
 
-snapshot = pd.read_csv(SNAPSHOT_INFO)
-j = pd.read_csv(JITTER_INFO)
-gsdm = pd.read_csv(STATE_DISTRICT)
-gsp = pd.read_csv(STATE_PARLIAMENT_DUN)
-dummy = pd.read_csv(DUMMY)
+# snapshot = pd.read_csv(SNAPSHOT_INFO)
+# j = pd.read_csv(JITTER_INFO)
+# gsdm = pd.read_csv(STATE_DISTRICT)
+# gsp = pd.read_csv(STATE_PARLIAMENT_DUN)
+# dummy = pd.read_csv(DUMMY)
 
-
-generate_jitter_json(29, j, 'jitter.json', 'individual')
+generate_geojson(MALAYSIA_GEOJSON, "my.json", STATE_ABBR, 'country')

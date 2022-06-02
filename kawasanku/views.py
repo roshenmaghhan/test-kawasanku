@@ -12,12 +12,13 @@ from django.core.cache import cache
 
 import json
 from .jitter import JITTER_JSON_DUN
+from .geo import MYS_GEOJSON
 
 class TestJSON(APIView) :
     def get(self, request, format=None):
         # test_list = Test.objects.all()
         # serializer = Tserializers(test_list, many = True)
-        test = JITTER_JSON_DUN
+        test = MYS_GEOJSON
         # f = open("reqbin-verify.txt", "r")
         # data = f.read()
         # return HttpResponse(data)
