@@ -13,6 +13,7 @@ from django.core.cache import cache
 import json
 from .jitter import JITTER_JSON_DUN
 from .geo import MYS_GEOJSON
+from .snapshot import DOUGHNUT_JSON, PYRAMID_JSON
 
 class TestJSON(APIView) :
     def get(self, request, format=None):
@@ -34,14 +35,16 @@ class Snapshot(APIView) :
         doughnut_data = ''
         pyramid_data = ''
 
-        doughnut_data = cache.get('doughnut_cache')
+        # doughnut_data = cache.get('doughnut_cache')
+        doughnut_data = json.loads(DOUGHNUT_JSON)
         if not doughnut_data :
             doughnut_data = Doughnuts.objects.all()
             d_ser = DoughnutsSerializer(doughnut_data, many=True)
             doughnut_data = d_ser.data[0]['general']
             cache.set('doughnut_cache', doughnut_data, None)
 
-        pyramid_data = cache.get('pyramid_cache')
+        # pyramid_data = cache.get('pyramid_cache')
+        pyramid_data = json.loads(PYRAMID_JSON)
         if not pyramid_data :
             pyramid_data = Pyramid.objects.all()
             p_ser = PyramidSerializer(pyramid_data, many=True)
@@ -66,7 +69,8 @@ class DoughnutsJSON(APIView) :
 
         data = ''
 
-        doughnut_cache = cache.get('doughnut_cache')
+        # doughnut_cache = cache.get('doughnut_cache')
+        doughnut_cache = json.loads(DOUGHNUT_JSON)
         if not doughnut_cache :
             json_list = Doughnuts.objects.all()
             serializer = DoughnutsSerializer(json_list, many = True)
@@ -91,7 +95,8 @@ class PyramidJSON(APIView) :
 
         data = ''
         
-        pyramid_cache = cache.get('pyramid_cache')
+        # pyramid_cache = cache.get('pyramid_cache')
+        pyramid_cache = json.loads(PYRAMID_JSON)
         if not pyramid_cache : 
             json_list = Pyramid.objects.all()
             serializer = PyramidSerializer(json_list, many = True)
