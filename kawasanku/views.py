@@ -15,6 +15,7 @@ from .jitter import JITTER_JSON_DUN
 from .geo import MYS_GEOJSON
 from .snapshot import DOUGHNUT_JSON, PYRAMID_JSON
 from .areas import STATIC_LINKS_JSON, DROPDOWN_JSON, AREAS_JSON
+from .jitter import JITTER_JSON_STATE, JITTER_JSON_DISTRICT, JITTER_JSON_PARLIMEN, JITTER_JSON_DUN
 
 class TestJSON(APIView) :
     def get(self, request, format=None):
@@ -212,12 +213,14 @@ class JitterJSON(APIView) :
     def get(self, request, format=None):  
         area = request.query_params.get('area', None)
         r_area = is_valid(area)
-        q_list = {"state" : 1, "district" : 2, "parlimen" : 3, "dun" : 4}
+        # q_list = {"state" : 1, "district" : 2, "parlimen" : 3, "dun" : 4}
+        q_list = {"state" : JITTER_JSON_STATE, "district" : JITTER_JSON_DISTRICT, "parlimen" : JITTER_JSON_PARLIMEN, "dun" : JITTER_JSON_DUN}
 
         if r_area != '' :
             data = ''
             q_id = q_list[r_area]
-            jitter_cache = cache.get("jitter_" + r_area)
+            # jitter_cache = cache.get("jitter_" + r_area)
+            jitter_cache = json.loads(q_id)
             if not jitter_cache :
                 json_list = Jitter.objects.filter(id=q_id)
                 serializer = JitterSerializer(json_list, many = True)
@@ -225,7 +228,6 @@ class JitterJSON(APIView) :
                 cache.set("jitter_" + r_area, data, None)
             else :
                 data = jitter_cache
-                print('From cache')
 
             if len(data) == 0 :
                 return JsonResponse([], safe=False)
@@ -296,7 +298,8 @@ def text_change(x) :
 def is_valid(area) :
     data = ''
     
-    area_cache = cache.get('area_cache')
+    # area_cache = cache.get('area_cache')
+    area_cache = json.loads(AREAS_JSON)
     if not area_cache :
         json_list = AreaType.objects.all()
         serializer = AreaSerializer(json_list, many = True)
