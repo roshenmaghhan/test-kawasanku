@@ -356,3 +356,12 @@ gsp = pd.read_csv(STATE_PARLIAMENT_DUN)
 # dummy = pd.read_csv(DUMMY)
 
 GENERATED_PATH = './staticfiles/generated/'
+GEO_PATH = 'geo/'
+ 
+index = 0
+for i in ['country', 'state', 'district', 'parlimen', 'dun'] :
+    ext_type = "malaysia" if i == 'country' else i
+    filepath = Path("./staticfiles/src_data/geojson/geo_" + str(index) + "_" + ext_type + ".json")
+    filename = GENERATED_PATH + GEO_PATH + 'geo_' + i + '.json'
+    generate_geojson(filepath, filename, STATE_ABBR, i)
+    index += 1
